@@ -13,6 +13,7 @@ import commons.BasePage;
 import pageObject.HomePageObject;
 import pageObject.LoginPageObject;
 import pageObject.RegisterPageObject;
+import pageObject.TrashMailPageObject;
 
 public class Login extends BasePage {
 	private WebDriver driver;
@@ -22,6 +23,7 @@ public class Login extends BasePage {
 	private HomePageObject homePage;
 	private LoginPageObject loginPage;
 	private RegisterPageObject registerPage;
+	private TrashMailPageObject trashPage;
 	private String firstName;
 	private String lastName;
 	private String password;
@@ -30,6 +32,7 @@ public void beforeClass() {
 		System.setProperty("webdriver.gecko.driver", projectPath + "\\browserDrivers\\geckodriver.exe");
 		driver = new FirefoxDriver();
 		homePage = new HomePageObject();
+		
 //		basePage = BasePage.getBasePageObject();
 		firstName = "w_firstName";
 		lastName = "w_lastName";
@@ -37,6 +40,7 @@ public void beforeClass() {
 		emailAddress = "";
 
 		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+		
 		driver.manage().window().maximize();
 		driver.get("http://saferailway.somee.com/Page/HomePage.cshtml");
 		homePage.clickToRegisterPage();
@@ -45,8 +49,9 @@ public void beforeClass() {
 		registerPage.inputToPasswordTextbox();
 		registerPage.inputToConfirmPasswordTextbox();
 		registerPage.inputToPassportNumber();
-		registerPage.clickToRegisterButton
-		
+		registerPage.clickToRegisterButton();
+	  	trashPage = new TrashMailPageObject();
+	  	trashPage.verifyRegistedMail();
 	  }
   @Test
   public void TC_01_Login_Valid_Username_Password() {
@@ -55,6 +60,8 @@ public void beforeClass() {
 	  	loginPage.inputToEmailTextbox(emailAddress);
 	  	loginPage.inputToPasswordTextbox(password);
 	  	loginPage.clickToLoginButton();
+	  	trashPage = new TrashMailPageObject();
+	  	trashPage.verifyRegistedMail();
 	  	
 	  	
   }
