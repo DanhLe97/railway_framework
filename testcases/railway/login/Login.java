@@ -43,6 +43,8 @@ public void beforeClass() {
 		
 		driver.manage().window().maximize();
 		driver.get("http://saferailway.somee.com/Page/HomePage.cshtml");
+		trashPage = new TrashMailPageObject(driver);
+		trashPage.getEmail();
 		homePage.clickToRegisterPage();
 		registerPage = new RegisterPageObject();
 		registerPage.inputToEmailTextbox();
@@ -50,7 +52,7 @@ public void beforeClass() {
 		registerPage.inputToConfirmPasswordTextbox();
 		registerPage.inputToPassportNumber();
 		registerPage.clickToRegisterButton();
-	  	trashPage = new TrashMailPageObject();
+	  	
 	  	trashPage.verifyRegistedMail();
 	  }
   @Test
