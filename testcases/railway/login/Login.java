@@ -27,6 +27,7 @@ public class Login extends BasePage {
 	private String firstName;
 	private String lastName;
 	private String password;
+	private String pidNumber;
 	@BeforeClass
 public void beforeClass() {
 		System.setProperty("webdriver.gecko.driver", projectPath + "\\browserDrivers\\geckodriver.exe");
@@ -37,20 +38,22 @@ public void beforeClass() {
 		firstName = "w_firstName";
 		lastName = "w_lastName";
 		password = "123456";
-		emailAddress = "";
-
+		pidNumber = "2312512312";
+		emailAddress = trashPage.getEmail(emailAddress);
+		
 		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 		
 		driver.manage().window().maximize();
 		driver.get("http://saferailway.somee.com/Page/HomePage.cshtml");
 		trashPage = new TrashMailPageObject(driver);
-		trashPage.getEmail();
+		
+		
 		homePage.clickToRegisterPage();
-		registerPage = new RegisterPageObject();
-		registerPage.inputToEmailTextbox();
-		registerPage.inputToPasswordTextbox();
-		registerPage.inputToConfirmPasswordTextbox();
-		registerPage.inputToPassportNumber();
+		registerPage = new RegisterPageObject(driver);
+		registerPage.inputToEmailTextbox(emailAddress);
+		registerPage.inputToPasswordTextbox(password);
+		registerPage.inputToConfirmPasswordTextbox(password);
+		registerPage.inputToPassportNumber(pidNumber);
 		registerPage.clickToRegisterButton();
 	  	
 	  	trashPage.verifyRegistedMail();
@@ -62,8 +65,6 @@ public void beforeClass() {
 	  	loginPage.inputToEmailTextbox(emailAddress);
 	  	loginPage.inputToPasswordTextbox(password);
 	  	loginPage.clickToLoginButton();
-	  	trashPage = new TrashMailPageObject();
-	  	trashPage.verifyRegistedMail();
 	  	
 	  	
   }

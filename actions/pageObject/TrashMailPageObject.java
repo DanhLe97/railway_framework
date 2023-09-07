@@ -12,13 +12,21 @@ private WebDriver driver;
 public TrashMailPageObject (WebDriver driver) {
 	this.driver = driver;
 }
-public void verifyRegistedMail() {
-	// TODO Auto-generated method stub
-	
+public void verifyRegistedMail (String generateFakeNumber) throws InterruptedException {
+	clickToElement(driver, TrashMailPageUI.CHANGE_EMAILNAME_BUTTON);
+	sendkeyToElement(driver, TrashMailPageUI.EMAILNAME_TEXTBOX, generateFakeNumber);
+	clickToElement(driver, TrashMailPageUI.SET_EMAILNAME_BUTTON);
+	wait(5000);
 }
 
-public void getEmail(String generateFakeNumber) {
-	sendkeyToElement(driver, TrashMailPageUI , generateFakeNumber);
+public String getEmail(String generateFakeNumber) {
+	clickToElement(driver, TrashMailPageUI.CHANGE_EMAILNAME_BUTTON);
+	sendkeyToElement(driver, TrashMailPageUI.EMAILNAME_TEXTBOX, generateFakeNumber);
+	clickToElement(driver, TrashMailPageUI.SET_EMAILNAME_BUTTON);
+
+	return generateFakeNumber + "@" + getElementText(driver, TrashMailPageUI.EMAIL_DOMAIN_TEXTBOX);
+ 
+
 }
 
 
@@ -26,5 +34,6 @@ public int generateFakeNumber() {
 	Random rand = new Random();
 	return rand.nextInt(9999);
 }
+
 
 }
