@@ -28,6 +28,7 @@ public class Login extends BasePage {
 	private String lastName;
 	private String password;
 	private String pidNumber;
+	private String trashMailUrl;
 	@BeforeClass
 public void beforeClass() {
 		System.setProperty("webdriver.gecko.driver", projectPath + "\\browserDrivers\\geckodriver.exe");
@@ -39,7 +40,8 @@ public void beforeClass() {
 		lastName = "w_lastName";
 		password = "123456";
 		pidNumber = "2312512312";
-		emailAddress = trashPage.getEmail(emailAddress);
+		trashMailUrl = "https://www.guerrillamail.com/";
+		emailAddress = (String) trashPage.getEmail(emailAddress);
 		
 		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 		
@@ -47,17 +49,40 @@ public void beforeClass() {
 		driver.get("http://saferailway.somee.com/Page/HomePage.cshtml");
 		trashPage = new TrashMailPageObject(driver);
 		
-		
 		homePage.clickToRegisterPage();
 		registerPage = new RegisterPageObject(driver);
+		registerPage.registNewEmail();
 		registerPage.inputToEmailTextbox(emailAddress);
 		registerPage.inputToPasswordTextbox(password);
 		registerPage.inputToConfirmPasswordTextbox(password);
 		registerPage.inputToPassportNumber(pidNumber);
 		registerPage.clickToRegisterButton();
-	  	
-	  	trashPage.verifyRegistedMail();
+		
+	  	openPageUrl(driver, trashMailUrl);
+	  	trashPage.activeRegistedMail();
 	  }
+	
+  @Test
+	  public void TC_05_Login_Inactive_Account() {
+		  homePage.clickToRegisterPage();
+			registerPage = new RegisterPageObject(driver);
+			
+			registerPage.inputToEmailTextbox(emailAddress);
+			registerPage.inputToPasswordTextbox(password);
+			registerPage.inputToConfirmPasswordTextbox(password);
+			registerPage.inputToPassportNumber(pidNumber);
+			registerPage.clickToRegisterButton();
+			homePage.clickToLoginPage();
+			
+
+		  loginPage = new LoginPageObject();
+		  	loginPage.inputToEmailTextbox(emailAddress);
+		  	loginPage.inputToPasswordTextbox("111111");
+		  	loginPage.clickToLoginButton();
+		  	
+		  	
+	  }
+	
   @Test
   public void TC_01_Login_Valid_Username_Password() {
 	  	homePage.clickToLoginPage();
@@ -107,25 +132,6 @@ public void beforeClass() {
 	  	
   }
   @Test
-  public void TC_05_Login_Inactive_Account() {
-	  homePage.clickToRegisterPage();
-		registerPage = new RegisterPageObject();
-		
-		registerPage.inputToEmailTextbox();
-		registerPage.inputToPasswordTextbox();
-		registerPage.inputToConfirmPasswordTextbox();
-		registerPage.inputToPassportNumber();
-		registerPage.clickToRegisterButton();
-		homePage.clickToLoginPage();
-		
-
-	  loginPage = new LoginPageObject();
-	  	loginPage.inputToEmailTextbox(emailAddress);
-	  	loginPage.inputToPasswordTextbox("111111");
-	  	loginPage.clickToLoginButton();
-	  	
-	  	
-  }
 	public int generateFakeNumber() {
 		Random rand = new Random();
 		return rand.nextInt(9999);
